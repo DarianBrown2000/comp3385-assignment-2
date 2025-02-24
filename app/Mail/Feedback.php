@@ -16,7 +16,11 @@ class Feedback extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(
+        public string $name,
+        public string $email,
+        public string $comment
+    )
     {
         //
     }
@@ -27,7 +31,8 @@ class Feedback extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Feedback',
+            from: new Address($this->email, $this->name),
+            subject: 'Feedback from ' . $this->name,
         );
     }
 
@@ -37,7 +42,7 @@ class Feedback extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'mail.feedback',
         );
     }
 

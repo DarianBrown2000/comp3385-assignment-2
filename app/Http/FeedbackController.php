@@ -13,15 +13,19 @@ class FeedbackController extends Controller
 
     public function send(Request $request)
     {
-        $request->validate([
+        $validatedData= $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
             'comment' => 'required|string',
         ]);
 
+        $name = $request->input('name');
+        $email = $request->input('email');
+        $comment = $request->input('comment');
+
         // Send email
         Mail::to('comp3385@uwi.edu', 'COMP3385 Course Admin')
-            ->send(new Feedback($request->name, $request->email, $request->comment));
+            ->send(new Feedback($name, $email, $comment));
 
         return redirect('/feedback/success')->with('success', 'Feedback sent successfully!');
     }
